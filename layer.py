@@ -6,8 +6,6 @@ class EchoLayer(YowInterfaceLayer):
     @ProtocolEntityCallback("message")
     def onMessage(self, messageProtocolEntity):
 
-        print(messageProtocolEntity.getType())
-
         if messageProtocolEntity.getType() == 'text':
             self.onTextMessage(messageProtocolEntity)
         elif messageProtocolEntity.getType() == 'media':
@@ -16,6 +14,7 @@ class EchoLayer(YowInterfaceLayer):
 
         self.toLower(messageProtocolEntity.ack())
         self.toLower(messageProtocolEntity.ack(True))
+        self.toLower(messageProtocolEntity.forward(messageProtocolEntity.getFrom()))
 
 
     @ProtocolEntityCallback("receipt")
@@ -23,7 +22,6 @@ class EchoLayer(YowInterfaceLayer):
         self.toLower(entity.ack())
 
     def onTextMessage(self, messageProtocolEntity):
-        self.toLower(messageProtocolEntity.forward(messageProtocolEntity.getFrom()))
         # just print info
         print("Echoing %s to %s" % (messageProtocolEntity.getBody(), messageProtocolEntity.getFrom(False)))
 
